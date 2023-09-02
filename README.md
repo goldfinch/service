@@ -1,5 +1,7 @@
-- SendGrid
 - Twilio
-- Mailchimp
 - Mailjet
 - Brevo
+
+```
+composer require goldfinch/service
+```
