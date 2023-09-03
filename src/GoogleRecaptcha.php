@@ -1,6 +1,6 @@
 <?php
 
-namespace Goldfich\Service;
+namespace Goldfinch\Service;
 
 use SilverStripe\Core\Environment;
 use ReCaptcha\ReCaptcha;
