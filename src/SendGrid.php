@@ -12,7 +12,7 @@ class SendGrid
 
     private $api_key;
 
-    public function __construct($api_key)
+    public function __construct($api_key = null)
     {
         $this->initAppEnv();
 
