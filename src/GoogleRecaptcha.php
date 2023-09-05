@@ -9,11 +9,14 @@ class GoogleRecaptcha
 {
     private $secret_key;
 
-    public function __construct($secret_key)
+    public function __construct($secret_key = null)
     {
         $this->initAppEnv();
 
-        $this->secret_key = $secret_key;
+        if ($secret_key)
+        {
+            $this->secret_key = $secret_key;
+        }
 
         $this->initClient();
     }

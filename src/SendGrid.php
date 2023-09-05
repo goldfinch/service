@@ -16,7 +16,10 @@ class SendGrid
     {
         $this->initAppEnv();
 
-        $this->api_key = $api_key;
+        if ($api_key)
+        {
+            $this->api_key = $api_key;
+        }
 
         $this->initClient();
     }
@@ -31,10 +34,10 @@ class SendGrid
     public function send($data)
     {
         $mail = new Mail();
-        $mail->setFrom($data['from']);
+        $mail->setFrom($data['from'], $data['name']);
         $mail->addTo($data['to']);
         $mail->setSubject($data['subject']);
-        $mail->setReplyTo($data['reply_to'], $data['reply_to_name']);
+        $mail->setReplyTo($data['reply_to'], $data['name']);
         $mail->addBcc($data['bcc']);
         $mail->addContent(
             'text/html', $data['body'],
