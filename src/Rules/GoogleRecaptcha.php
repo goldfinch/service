@@ -10,12 +10,11 @@ use Closure;
 
 class GoogleRecaptcha implements ValidationRule
 {
+    // TODO: add hidden input to formik to show error? or find another way to show it
+    // TODO: hostname?
+    // TODO: amend message?
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (strtoupper($value) !== $value) {
-            $fail('The :attribute must be uppercase.');
-        }
-
         $recaptcha = new GoogleRecaptchaService(Environment::getEnv('APP_GOOGLE_RECAPTCHA_SECRET_KEY'));
 
         $response = $recaptcha->client

@@ -2,40 +2,45 @@
 
 namespace Goldfinch\Service;
 
-use SilverStripe\Core\Environment;
-use SendGrid as SendGridCore;
 use SendGrid\Mail\Mail;
+use SendGrid as SendGridCore;
+use SilverStripe\Core\Environment;
+use SilverStripe\Control\Controller;
 
 class SendGrid
 {
-    private $client;
+    private static $client;
 
-    private $api_key;
+    private static $api_key;
 
     public function __construct($api_key = null)
     {
-        $this->initAppEnv();
+        self::initAppEnv();
 
         if ($api_key)
         {
-            $this->api_key = $api_key;
+            self::$api_key = $api_key;
         }
 
-        $this->initClient();
+        self::initClient();
     }
 
-    public function setApiKey($api_key)
+    public static function setApiKey($api_key)
     {
-        $this->api_key = $api_key;
+        self::$api_key = $api_key;
     }
 
     // --- API Methods START
 
-    public function send($data)
+    // TODO: make error respons friendly for formik
+    public static function send($data)
     {
+        self::initAppEnv();
+        self::initClient();
+
         $mail = new Mail();
         $mail->setFrom($data['from'], $data['name']);
-        $mail->addTo($data['to']);
+        // $mail->addTo($data['to']);
         $mail->setSubject($data['subject']);
         $mail->setReplyTo($data['reply_to'], $data['name']);
         $mail->addBcc($data['bcc']);
@@ -43,25 +48,49 @@ class SendGrid
             'text/html', $data['body'],
         );
 
-        return $this->client->send($mail);
+        $return = [];
+
+        try {
+
+            $response = self::$client->send($mail);
+
+            $return = [
+                'statusCode' => $response->statusCode(),
+                'message' => '', // $response->body()
+            ];
+
+        } catch (Exception $e) {
+
+            $return = [
+                'statusCode' => $e->getMessage(),
+                'message' => '',
+            ];
+        }
+
+        if ($return['statusCode'] != 202)
+        {
+            return Controller::curr()->httpError($return['statusCode'], json_encode($return));
+        }
+
+        return $return;
     }
 
     // --- API Methods END
 
-    private function initClient()
+    private static function initClient()
     {
-        $this->client = new SendGridCore($this->api_key);
+        self::$client = new SendGridCore(self::$api_key);
     }
 
-    private function initAppEnv()
+    private static function initAppEnv()
     {
         if (class_exists(Environment::class, false)) // SilverStripe
         {
-            $this->api_key = Environment::getEnv('APP_SERVICE_SENDGRID_API_KEY');
+            self::$api_key = Environment::getEnv('APP_SERVICE_SENDGRID_API_KEY');
         }
         else if (function_exists('env')) // Laravel
         {
-            $this->api_key = env('APP_SERVICE_SENDGRID_API_KEY');
+            self::$api_key = env('APP_SERVICE_SENDGRID_API_KEY');
         }
     }
 }
