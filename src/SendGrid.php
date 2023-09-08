@@ -40,7 +40,7 @@ class SendGrid
 
         $mail = new Mail();
         $mail->setFrom($data['from'], $data['name']);
-        // $mail->addTo($data['to']);
+        $mail->addTo($data['to']);
         $mail->setSubject($data['subject']);
         $mail->setReplyTo($data['reply_to'], $data['name']);
         $mail->addBcc($data['bcc']);
@@ -54,6 +54,8 @@ class SendGrid
 
             $response = self::$client->send($mail);
 
+            // dd($response);
+
             $return = [
                 'statusCode' => $response->statusCode(),
                 'message' => '', // $response->body()
@@ -63,13 +65,14 @@ class SendGrid
 
             $return = [
                 'statusCode' => $e->getMessage(),
-                'message' => '',
+                'message' => '', // $e->getBody(),
             ];
         }
 
         if ($return['statusCode'] != 202)
         {
-            return Controller::curr()->httpError($return['statusCode'], json_encode($return));
+            return self::abort('Sorry, something went wrong. Please, try again.');
+            // return Controller::curr()->httpError($return['statusCode'], json_encode($return));
         }
 
         return $return;
@@ -92,5 +95,10 @@ class SendGrid
         {
             self::$api_key = env('APP_SERVICE_SENDGRID_API_KEY');
         }
+    }
+
+    protected static function abort($data, $code = 422)
+    {
+        return Controller::curr()->httpError($code, json_encode($data));
     }
 }
