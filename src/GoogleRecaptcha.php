@@ -7,7 +7,7 @@ use ReCaptcha\ReCaptcha;
 
 class GoogleRecaptcha
 {
-    private $client;
+    public $client;
     private $secret_key;
 
     public function __construct($secret_key = null)
