@@ -5,7 +5,7 @@ namespace Goldfinch\Service\Providers;
 use Carbon\Carbon;
 use SilverStripe\View\TemplateGlobalProvider;
 
-class HelpersTemplateProvider implements TemplateGlobalProvider
+class CarbonTemplateProvider implements TemplateGlobalProvider
 {
     /**
      * @return array|void
@@ -21,7 +21,7 @@ class HelpersTemplateProvider implements TemplateGlobalProvider
     {
         if ($date)
         {
-            return Carbon::createFromFormat($format, $date);
+            return Carbon::parse($date)->format($format);
         }
         else
         {
