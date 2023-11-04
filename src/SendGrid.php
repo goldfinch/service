@@ -43,7 +43,12 @@ class SendGrid
         $mail->addTo($data['to']);
         $mail->setSubject($data['subject']);
         $mail->setReplyTo($data['reply_to'], $data['name']);
-        $mail->addBcc($data['bcc']);
+
+        if (isset($data['bcc']))
+        {
+            $mail->addBcc($data['bcc']);
+        }
+
         $mail->addContent(
             'text/html', $data['body'],
         );
