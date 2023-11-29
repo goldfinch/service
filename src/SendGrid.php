@@ -40,13 +40,18 @@ class SendGrid
 
         $mail = new Mail();
         $mail->setFrom($data['from'], $data['name']);
-        $mail->addTo($data['to']);
+        $mail->addTos($data['to']);
         $mail->setSubject($data['subject']);
         $mail->setReplyTo($data['reply_to'], $data['name']);
 
-        if (isset($data['bcc']))
+        if (isset($data['bcc']) && count($data['bcc']))
         {
-            $mail->addBcc($data['bcc']);
+            $mail->addBccs($data['bcc']);
+        }
+
+        if (isset($data['cc']) && count($data['cc']))
+        {
+            $mail->addCcs($data['cc']);
         }
 
         $mail->addContent(
