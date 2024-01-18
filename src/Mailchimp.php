@@ -24,18 +24,15 @@ class Mailchimp
     {
         self::initAppEnv();
 
-        if ($api_key)
-        {
+        if ($api_key) {
             self::$api_key = $api_key;
         }
 
-        if ($server)
-        {
+        if ($server) {
             self::$server = $server;
         }
 
-        if ($list_id)
-        {
+        if ($list_id) {
             self::$list_id = $list_id;
         }
 
@@ -61,18 +58,16 @@ class Mailchimp
 
     public static function addListMember($options, $list_id = null)
     {
-        if (!self::$client)
-        {
+        if (!self::$client) {
             self::initAppEnv();
             self::initClient();
         }
 
-        if (!$list_id)
-        {
+        if (!$list_id) {
             $list_id = self::$list_id;
         }
 
-        return self::call(function() use ($list_id, $options) {
+        return self::call(function () use ($list_id, $options) {
             return self::$client->lists->addListMember($list_id, $options);
         }, $options);
     }
@@ -91,14 +86,13 @@ class Mailchimp
 
     private static function initAppEnv()
     {
-        if (class_exists(Environment::class, false)) // SilverStripe
-        {
+        if (class_exists(Environment::class, false)) {
+            // SilverStripe
             self::$api_key = ss_env('APP_SERVICE_MAILCHIMP_API_KEY');
             self::$server = ss_env('APP_SERVICE_MAILCHIMP_SERVER');
             self::$list_id = ss_env('APP_SERVICE_MAILCHIMP_LIST_ID');
-        }
-        else if (function_exists('env')) // Laravel
-        {
+        } elseif (function_exists('env')) {
+            // Laravel
             self::$api_key = env('APP_SERVICE_MAILCHIMP_API_KEY');
             self::$server = env('APP_SERVICE_MAILCHIMP_SERVER');
             self::$list_id = env('APP_SERVICE_MAILCHIMP_LIST_ID');
@@ -110,7 +104,12 @@ class Mailchimp
         try {
             $response = $call();
         } catch (ClientException $e) {
-            $response = json_decode($e->getResponse()->getBody()->getContents());
+            $response = json_decode(
+                $e
+                    ->getResponse()
+                    ->getBody()
+                    ->getContents(),
+            );
             self::setErrors($response, $options);
             self::abort(self::getErrors());
         } catch (ApiException $e) {
@@ -124,9 +123,13 @@ class Mailchimp
 
     private static function setErrors($response, $options)
     {
-        if ($response->title == 'Member Exists')
-        {
-            self::$errors = [$options['_field'] => 'Seems like ' . $options['email_address'] . ' is already subscribed.'];
+        if ($response->title == 'Member Exists') {
+            self::$errors = [
+                $options['_field'] =>
+                    'Seems like ' .
+                    $options['email_address'] .
+                    ' is already subscribed.',
+            ];
         }
     }
 

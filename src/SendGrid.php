@@ -17,8 +17,7 @@ class SendGrid
     {
         self::initAppEnv();
 
-        if ($api_key)
-        {
+        if ($api_key) {
             self::$api_key = $api_key;
         }
 
@@ -41,50 +40,36 @@ class SendGrid
         $mail = new Mail();
         $mail->setFrom($data['from'], $data['name']);
 
-        if (is_array($data['to']))
-        {
+        if (is_array($data['to'])) {
             $mail->addTos($data['to']);
-        }
-        else
-        {
+        } else {
             $mail->addTo($data['to']);
         }
 
         $mail->setSubject($data['subject']);
         $mail->setReplyTo($data['reply_to'], $data['name']);
 
-        if (isset($data['bcc']))
-        {
-            if (is_array($data['bcc']) && count($data['bcc']))
-            {
+        if (isset($data['bcc'])) {
+            if (is_array($data['bcc']) && count($data['bcc'])) {
                 $mail->addBccs($data['bcc']);
-            }
-            else
-            {
+            } else {
                 $mail->addBcc($data['bcc']);
             }
         }
 
-        if (isset($data['cc']))
-        {
-            if (is_array($data['cc']) && count($data['cc']))
-            {
+        if (isset($data['cc'])) {
+            if (is_array($data['cc']) && count($data['cc'])) {
                 $mail->addCcs($data['cc']);
-            }
-            else
-            {
+            } else {
                 $mail->addCc($data['cc']);
             }
         }
 
-        $mail->addContent(
-            'text/html', $data['body'],
-        );
+        $mail->addContent('text/html', $data['body']);
 
         $return = [];
 
         try {
-
             $response = self::$client->send($mail);
 
             // dd($response);
@@ -93,18 +78,17 @@ class SendGrid
                 'statusCode' => $response->statusCode(),
                 'message' => '', // $response->body()
             ];
-
         } catch (Exception $e) {
-
             $return = [
                 'statusCode' => $e->getMessage(),
                 'message' => '', // $e->getBody(),
             ];
         }
 
-        if ($return['statusCode'] != 202)
-        {
-            return self::abort('Sorry, something went wrong. Please, try again.');
+        if ($return['statusCode'] != 202) {
+            return self::abort(
+                'Sorry, something went wrong. Please, try again.',
+            );
             // return Controller::curr()->httpError($return['statusCode'], json_encode($return));
         }
 
@@ -120,12 +104,13 @@ class SendGrid
 
     private static function initAppEnv()
     {
-        if (class_exists(Environment::class, false)) // SilverStripe
-        {
-            self::$api_key = Environment::getEnv('APP_SERVICE_SENDGRID_API_KEY');
-        }
-        else if (function_exists('env')) // Laravel
-        {
+        if (class_exists(Environment::class, false)) {
+            // SilverStripe
+            self::$api_key = Environment::getEnv(
+                'APP_SERVICE_SENDGRID_API_KEY',
+            );
+        } elseif (function_exists('env')) {
+            // Laravel
             self::$api_key = env('APP_SERVICE_SENDGRID_API_KEY');
         }
     }

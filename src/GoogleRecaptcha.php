@@ -14,8 +14,7 @@ class GoogleRecaptcha
     {
         $this->initAppEnv();
 
-        if ($secret_key)
-        {
+        if ($secret_key) {
             $this->secret_key = $secret_key;
         }
 
@@ -29,12 +28,13 @@ class GoogleRecaptcha
 
     private function initAppEnv()
     {
-        if (class_exists(Environment::class, false)) // SilverStripe
-        {
-            $this->secret_key = Environment::getEnv('APP_GOOGLE_RECAPTCHA_SECRET_KEY');
-        }
-        else if (function_exists('env')) // Laravel
-        {
+        if (class_exists(Environment::class, false)) {
+            // SilverStripe
+            $this->secret_key = Environment::getEnv(
+                'APP_GOOGLE_RECAPTCHA_SECRET_KEY',
+            );
+        } elseif (function_exists('env')) {
+            // Laravel
             $this->secret_key = env('APP_GOOGLE_RECAPTCHA_SECRET_KEY');
         }
     }

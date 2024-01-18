@@ -12,19 +12,14 @@ class CarbonTemplateProvider implements TemplateGlobalProvider
      */
     public static function get_template_global_variables(): array
     {
-        return [
-            'Carbon',
-        ];
+        return ['Carbon'];
     }
 
     public static function Carbon($format, $date = null)
     {
-        if ($date)
-        {
+        if ($date) {
             return Carbon::parse($date)->format($format);
-        }
-        else
-        {
+        } else {
             return Carbon::now()->format($format);
         }
     }
