@@ -2,8 +2,8 @@
 
 namespace Goldfinch\Service;
 
-use SilverStripe\Core\Environment;
 use ReCaptcha\ReCaptcha;
+use SilverStripe\Core\Environment;
 
 class GoogleRecaptcha
 {

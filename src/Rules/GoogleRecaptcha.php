@@ -2,11 +2,10 @@
 
 namespace Goldfinch\Service\Rules;
 
-use SilverStripe\Core\Environment;
-use SilverStripe\Control\Director;
-use Goldfinch\Service\GoogleRecaptcha as GoogleRecaptchaService;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Closure;
+use SilverStripe\Core\Environment;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Goldfinch\Service\GoogleRecaptcha as GoogleRecaptchaService;
 
 class GoogleRecaptcha implements ValidationRule
 {

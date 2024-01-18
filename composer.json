@@ -1,11 +1,17 @@
 {
     "name": "goldfinch/service",
     "description": "",
-    "type": "library",
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "silverstripe"
+    ],
     "license": "MIT",
-    "authors": [{
-        "name": "Artem Karasev"
-    }],
+    "authors": [
+        {
+            "name": "Art Karasev",
+            "email": "art.karasev@proton.me"
+        }
+    ],
     "require": {
         "php": ">=8.0",
         "goldfinch/helpers": "^1.0",
