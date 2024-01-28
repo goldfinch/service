@@ -89,7 +89,9 @@ class SendGrid
             return self::abort(
                 'Sorry, something went wrong. Please, try again.',
             );
-            // return Controller::curr()->httpError($return['statusCode'], json_encode($return));
+            // if (Controller::has_curr()) {
+            //     return Controller::curr()->httpError($return['statusCode'], json_encode($return));
+            // }
         }
 
         return $return;
@@ -117,6 +119,10 @@ class SendGrid
 
     protected static function abort($data, $code = 422)
     {
-        return Controller::curr()->httpError($code, json_encode($data));
+        if (Controller::has_curr()) {
+            return Controller::curr()->httpError($code, json_encode($data));
+        } else {
+            exit;
+        }
     }
 }

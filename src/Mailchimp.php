@@ -140,6 +140,10 @@ class Mailchimp
 
     protected static function abort($data, $code = 422)
     {
-        return Controller::curr()->httpError($code, json_encode($data));
+        if (Controller::has_curr()) {
+            return Controller::curr()->httpError($code, json_encode($data));
+        } else {
+            exit;
+        }
     }
 }
