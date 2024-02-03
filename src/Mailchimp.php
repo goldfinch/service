@@ -2,7 +2,6 @@
 
 namespace Goldfinch\Service;
 
-use MailchimpMarketing\ApiClient;
 use SilverStripe\Core\Environment;
 use MailchimpMarketing\ApiException;
 use SilverStripe\Control\Controller;
@@ -76,7 +75,7 @@ class Mailchimp
 
     private static function initClient()
     {
-        self::$client = new ApiClient();
+        self::$client = new MailchimpApiClient();
 
         self::$client->setConfig([
             'apiKey' => self::$api_key,
