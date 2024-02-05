@@ -4,7 +4,7 @@ namespace Goldfinch\Service\Rules;
 
 use Closure;
 use SilverStripe\Core\Environment;
-use Illuminate\Contracts\Validation\ValidationRule;
+use Goldfinch\Illuminate\ValidationRule;
 use Goldfinch\Service\GoogleRecaptcha as GoogleRecaptchaService;
 
 class GoogleRecaptcha implements ValidationRule
