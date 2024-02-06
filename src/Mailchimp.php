@@ -129,6 +129,10 @@ class Mailchimp
                     $options['email_address'] .
                     ' is already subscribed.',
             ];
+        } else {
+            self::$errors = [
+                $options['_field'] => $response->title,
+            ];
         }
     }
 
