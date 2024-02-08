@@ -2,7 +2,7 @@
 - Mailjet
 - Brevo
 
-```
+```bash
 composer require goldfinch/service
 ```
 
