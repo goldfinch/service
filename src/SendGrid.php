@@ -38,7 +38,7 @@ class SendGrid
         self::initClient();
 
         $mail = new Mail();
-        $mail->setFrom($data['from'], $data['name']);
+        $mail->setFrom(trim($data['from']), $data['name']);
 
         if (is_array($data['to'])) {
             $mail->addTos($data['to']);
@@ -47,7 +47,7 @@ class SendGrid
         }
 
         $mail->setSubject($data['subject']);
-        $mail->setReplyTo($data['reply_to'], $data['name']);
+        $mail->setReplyTo(trim($data['reply_to']), $data['name']);
 
         if (isset($data['bcc'])) {
             if (is_array($data['bcc']) && count($data['bcc'])) {
