@@ -2,10 +2,10 @@
 
 namespace Goldfinch\Service;
 
-use SendGrid\Mail\Mail;
 use SendGrid as SendGridCore;
-use SilverStripe\Core\Environment;
+use SendGrid\Mail\Mail;
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\Environment;
 
 class SendGrid
 {
@@ -66,6 +66,19 @@ class SendGrid
         }
 
         $mail->addContent('text/html', $data['body']);
+
+        // attachments
+        if (isset($data['attachments']) && count($data['attachments'])) {
+            foreach ($data['attachments'] as $attachment) {
+                $file_encoded = base64_encode(file_get_contents($attachment['tmp_name']));
+                $mail->addAttachment(
+                    $file_encoded,
+                    'application/octet-stream',
+                    $attachment['name'],
+                    'attachment'
+                );
+            }
+        }
 
         $return = [];
 
