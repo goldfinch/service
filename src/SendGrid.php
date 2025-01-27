@@ -2,10 +2,10 @@
 
 namespace Goldfinch\Service;
 
-use SendGrid as SendGridCore;
 use SendGrid\Mail\Mail;
-use SilverStripe\Control\Controller;
+use SendGrid as SendGridCore;
 use SilverStripe\Core\Environment;
+use SilverStripe\Control\Controller;
 
 class SendGrid
 {
@@ -47,7 +47,7 @@ class SendGrid
         }
 
         $mail->setSubject($data['subject']);
-        $mail->setReplyTo(trim($data['reply_to']), $data['name']);
+        $mail->setReplyTo(trim($data['reply_to']), isset($data['reply_name']) ? $data['reply_name'] : $data['name']);
 
         if (isset($data['bcc'])) {
             if (is_array($data['bcc']) && count($data['bcc'])) {
